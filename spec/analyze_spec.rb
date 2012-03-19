@@ -17,9 +17,6 @@ describe Analyzer do
     end
 
     it "accepts a file as a parameter and sets the @filename variable" do
-      analyzer = Analyzer.new("data/samplefile.html")
-      analyzer.should be_an_instance_of Analyzer
-      analyzer.filename.should == "data/samplefile.html"
     end
 
     it "accepts a directory as a parameter and set the @directory variable" do
@@ -28,11 +25,21 @@ describe Analyzer do
       analyzer.directory.should == "data/"
     end
 
-    it "raise exception for non-existent item" do
-      expect { Analyzer.new("nonexist") }.to raise_error(RuntimeError) 
+    it "raises exception for non-existent item" do
+      expect { Analyzer.new("nonexist") }.to raise_error(RuntimeError, "nonexistent file or directory") 
     end
 
-    it "ensures filename has a specific format"
+    it "accepts filename with correct format" do
+      fn = "data/2500_31%2F01%2F2011.html"
+      analyzer = Analyzer.new(fn)
+      analyzer.should be_an_instance_of Analyzer
+      analyzer.filename.should == fn 
+    end
+
+    it "raises exception for invalid filename format" do
+      fn = "data/samplefile.html"
+      expect { Analyzer.new(fn) }.to raise_error(RuntimeError, "invalid filename format")
+    end
   end
 
 end
