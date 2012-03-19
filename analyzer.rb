@@ -25,10 +25,12 @@ class Analyzer
       doc.css('table tr td').each { |i| result << i.content }
       # strip off header information
       result = result[5..-1]
-      # grab fazendas
-      result.each_slice(5).map {|i| @fazendas << i[0].rstrip }
-      # grab incricaos
-      result.each_slice(5).map {|i| @incricaos << i[1].rstrip }
+      result.each_slice(5).map do |i| 
+        # grab fazendas
+        @fazendas << i[0].rstrip
+        # grab incricaos
+        @incricaos << i[1].rstrip
+      end
       
     end
   end
