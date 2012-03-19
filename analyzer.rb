@@ -1,13 +1,14 @@
 require 'nokogiri'
 
 class Analyzer
-  attr_accessor :filename, :directory, :fazendas, :incricaos
+  attr_accessor :filename, :directory, :fazendas, :incricaos, :municipios
 
   FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
 
   def initialize(item)
     @fazendas = Array.new
     @incricaos = Array.new
+    @municipios = Array.new
     if File.directory? item 
       @directory = item
     elsif File.exists? item
@@ -30,6 +31,8 @@ class Analyzer
         @fazendas << i[0].rstrip
         # grab incricaos
         @incricaos << i[1].rstrip
+        # grab municipios
+        @municipios << i[2].rstrip
       end
       
     end
