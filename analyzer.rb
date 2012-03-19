@@ -1,12 +1,13 @@
 require 'nokogiri'
 
 class Analyzer
-  attr_accessor :filename, :directory, :fazendas
+  attr_accessor :filename, :directory, :fazendas, :incricaos
 
   FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
 
   def initialize(item)
-    @fazendas = Array.new 
+    @fazendas = Array.new
+    @incricaos = Array.new
     if File.directory? item 
       @directory = item
     elsif File.exists? item
@@ -25,7 +26,9 @@ class Analyzer
       # strip off header information
       result = result[5..-1]
       # grab fazendas
-      result.each_slice(5).map {|i| @fazendas << i[0]}
+      result.each_slice(5).map {|i| @fazendas << i[0].rstrip }
+      # grab incricaos
+      result.each_slice(5).map {|i| @incricaos << i[1].rstrip }
       
     end
   end

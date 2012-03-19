@@ -68,6 +68,7 @@ describe Analyzer do
                      "NOSSA SENHORA APARECIDA, SN",
                      "PIRAPO",
                      "SONHO MEU"]
+        @incricaos = ["13.371.622-8","13.269.389-5","13.285.324-8","13.306.879-0","13.388.007-9","13.303.993-5"]
       end
       
       # Is there a way to _actually_ check if the file's been opened?
