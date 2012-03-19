@@ -29,4 +29,34 @@ describe Analyzer do
     end
   end
 
+  describe "#filename" do
+    it "returns the correct filename when a filename is given as the parameter" do
+      fn = "data/2500_31%2F01%2F2011.html"
+      analyzer = Analyzer.new(fn)
+      analyzer.filename.should == fn
+    end
+
+    it "returns nil when a directory is given as the parameter" do
+      dir  = "data/"
+      analyzer = Analyzer.new(dir)
+      analyzer.filename.should == nil 
+    end
+
+  end
+
+  describe "#directory" do
+    it "returns the correct directory name when a directory is given as the parameter" do
+      dir = "data/"
+      analyzer = Analyzer.new(dir)
+      analyzer.directory.should == dir
+    end
+
+    it "returns nil when a filename is given as the parameter" do
+      fn = "data/2500_31%2F01%2F2011.html"
+      analyzer = Analyzer.new(fn)
+      analyzer.directory.should == nil
+    end
+  end
+  
+
 end
