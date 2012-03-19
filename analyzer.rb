@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 class Analyzer
-  attr_accessor :filename, :directory, :fazendas, :incricaos, :municipios
+  attr_accessor :filename, :directory, :fazendas, :incricaos, :municipios, :estados
 
   FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
 
@@ -9,6 +9,7 @@ class Analyzer
     @fazendas = Array.new
     @incricaos = Array.new
     @municipios = Array.new
+    @estados = Array.new
     if File.directory? item 
       @directory = item
     elsif File.exists? item
@@ -33,6 +34,8 @@ class Analyzer
         @incricaos << i[1].rstrip
         # grab municipios
         @municipios << i[2].rstrip
+        # grab estados
+        @estados << i[3].rstrip
       end
       
     end

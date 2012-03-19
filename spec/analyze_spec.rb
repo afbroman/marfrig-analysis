@@ -76,6 +76,8 @@ describe Analyzer do
                         "GAUCHA DO NORTE",
                         "SORRISO",
                         "CAMPINAPOLIS"]
+        @estados = Array.new
+        6.times { @estados << "MT" } # This file has Mato Grosso for the state each time
         
       end
       
@@ -97,6 +99,11 @@ describe Analyzer do
       it "reads the municipios from the file" do
         @analyzer.pull_data
         @analyzer.municipios.should == @municipios
+      end
+
+      it "reads the estados from the file" do
+        @analyzer.pull_data
+        @analyzer.estados.should == @estados
       end
     end
   end
