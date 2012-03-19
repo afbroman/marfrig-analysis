@@ -6,7 +6,7 @@ describe Analyzer do
     @analyzer = Analyzer.new
   end
 
-  describe "#new" do
+  describe Analyzer do
     it "returns a new analyzer object" do
       @analyzer.should be_an_instance_of Analyzer
     end
@@ -28,10 +28,8 @@ describe Analyzer do
       analyzer.directory.should == "data/"
     end
 
-    it "doesn't accept a non-existent file" do
-      analyzer = Analyzer.new("nonexist")
-      analyzer.filename.should == nil
-      analyzer.directory.should == nil
+    it "raise exception for non-existent item" do
+      expect { Analyzer.new("nonexist") }.to raise_error(RuntimeError) 
     end
   end
   
