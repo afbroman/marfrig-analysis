@@ -16,16 +16,21 @@ describe Analyzer do
       analyzer.should be_an_instance_of Analyzer
     end
 
-    it "accepts one parameter" do
-      analyzer = Analyzer.new("filename")
+    it "accepts an existing file as a parameter" do
+      analyzer = Analyzer.new("data/samplefile.html")
       analyzer.should be_an_instance_of Analyzer
     end
 
-    it "accepts an existing file as a parameter" do
-      analyzer = Analyzer.new("data/samplefile.html")
-      samplefile.should be
+    it "accepts a directory as a parameter" do
+      analyzer = Analyzer.new("data/")
+      analyzer.should be_an_instance_of Analyzer
     end
-    
+
+    it "accepts a file as a parameter and sets the @filename variable" do
+      analyzer = Analyzer.new("data/samplefile.html")
+      analyzer.should be_an_instance_of Analyzer
+      analyzer.filename.should == "data/samplefile.html"
+    end
   end
   
 end
