@@ -1,7 +1,11 @@
 class Analyzer
-  attr_accessor :filename
+  attr_accessor :filename, :directory
 
   def initialize(item="")
-    @filename = item
+    if File.directory? item 
+      @directory = item
+    elsif File.exists? item
+      @filename = item
+    end
   end
 end
