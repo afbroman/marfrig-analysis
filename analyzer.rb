@@ -3,7 +3,7 @@ class Analyzer
 
   FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
 
-  def initialize(item="")
+  def initialize(item)
     if File.directory? item 
       @directory = item
     elsif File.exists? item
