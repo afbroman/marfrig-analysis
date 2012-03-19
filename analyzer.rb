@@ -13,4 +13,10 @@ class Analyzer
       raise RuntimeError, "nonexistent file or directory" 
     end
   end
+
+  def pull_data
+    if (@filename)
+      f = File.open(@filename)
+    end
+  end
 end

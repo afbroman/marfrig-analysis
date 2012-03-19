@@ -13,7 +13,7 @@ describe Analyzer do
     end
 
     it "raises exception for non-existent item" do
-      expect { Analyzer.new("nonexist") }.to raise_error(RuntimeError, "nonexistent file or directory") 
+      expect { Analyzer.new("nonexistent") }.to raise_error(RuntimeError, "nonexistent file or directory") 
     end
 
     it "accepts filename with correct format" do
@@ -41,7 +41,6 @@ describe Analyzer do
       analyzer = Analyzer.new(dir)
       analyzer.filename.should == nil 
     end
-
   end
 
   describe "#directory" do
@@ -55,6 +54,18 @@ describe Analyzer do
       fn = "data/2500_31%2F01%2F2011.html"
       analyzer = Analyzer.new(fn)
       analyzer.directory.should == nil
+    end
+  end
+
+  describe "pull_data" do
+    describe "pull_data from file" do
+      it "opens the file" do
+        fn = "data/2500_31%2F01%2F2011.html"
+        analyzer = Analyzer.new(fn)
+        expect { analyzer.pull_data }.not_to raise_error
+      end
+
+      
     end
   end
   
