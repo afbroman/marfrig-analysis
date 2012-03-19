@@ -59,13 +59,31 @@ describe Analyzer do
 
   describe "pull_data" do
     describe "pull_data from file" do
-      it "opens the file" do
+      before :each do
         fn = "data/2500_31%2F01%2F2011.html"
-        analyzer = Analyzer.new(fn)
-        expect { analyzer.pull_data }.not_to raise_error
+        @analyzer = Analyzer.new(fn)
+        @fazendas = ["FAZENDA CAJUEIROS , 040313",
+                     "FAZENDA FORTALEZA , 12643",
+                     "FAZENDA PRENDA , 24963",
+                     "NOSSA SENHORA APARECIDA, SN",
+                     "PIRAPO",
+                     "SONHO MEU"]
+      end
+      
+      # Is there a way to _actually_ check if the file's been opened?
+      it "opens the file" do
+        expect { @analyzer.pull_data }.not_to raise_error
       end
 
-      
+      it "reads the fazendas from the file" do
+        @analyzer.pull_data
+        @analyzer.fazendas.should == @fazendas
+      end
+
+      it "reads the incricaos from the file" do
+        @analyzer.pull_data
+        @analyzer.incricaos.should == @incricaos
+      end
     end
   end
   
