@@ -6,8 +6,12 @@ describe Analyzer do
     @analyzer = Analyzer.new
   end
 
-  it "" do
+  describe "#new" do
+    it "returns a new analyzer object" do
+      @analyzer.should be_an_instance_of Analyzer
+    end
 
+    
   end
   
 end
