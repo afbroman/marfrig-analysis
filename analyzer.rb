@@ -15,10 +15,10 @@ class Analyzer
     if File.directory? item 
       @directory = item
     elsif File.exists? item
-      raise RuntimeError, "invalid filename format" unless item =~ FILENAME_FORMAT 
+      raise InvalidFilenameException, "invalid filename format" unless item =~ FILENAME_FORMAT 
       @filename = item
     elsif item != ""
-      raise RuntimeError, "nonexistent file or directory" 
+      raise NonexistentFileException, "nonexistent file or directory" 
     end
   end
 
@@ -41,10 +41,8 @@ class Analyzer
       end
     end 
   end
-
-
-
-  
-
   
 end
+
+class NonexistentFileException < Exception; end
+class InvalidFilenameException < Exception; end

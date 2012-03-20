@@ -13,7 +13,8 @@ describe Analyzer do
     end
 
     it "raises exception for non-existent item" do
-      expect { Analyzer.new("nonexistent") }.to raise_error(RuntimeError, "nonexistent file or directory") 
+      expect { Analyzer.new("nonexistent") }.to 
+        raise_error(NonexistentFileException, "nonexistent file or directory") 
     end
 
     it "accepts filename with correct format" do
@@ -25,7 +26,7 @@ describe Analyzer do
 
     it "raises exception for invalid filename format" do
       fn = "data/samplefile.html"
-      expect { Analyzer.new(fn) }.to raise_error(RuntimeError, "invalid filename format")
+      expect { Analyzer.new(fn) }.to raise_error(InvalidFilenameException, "invalid filename format")
     end
   end
 
