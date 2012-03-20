@@ -2,15 +2,16 @@ require 'nokogiri'
 require 'csv'
 
 class Analyzer
-  attr_accessor :filename, :directory, :fazendas, :incricaos, :municipios, :estados
+  attr_accessor :filename, :directory, :output, :fazendas, :incricaos, :municipios, :estados
 
   FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
 
-  def initialize(item)
+  def initialize(item, out)
     @fazendas = Array.new
     @incricaos = Array.new
     @municipios = Array.new
     @estados = Array.new
+    @output = out
     
     if File.directory? item 
       @directory = item
@@ -30,7 +31,13 @@ class Analyzer
       # strip off header
       result = result[5..-1]
       extract_fields result
+    else
+      
     end
+  end
+
+  def output_csv
+    CSV.open(@output, 'wb') { |csv| csv << [] }
   end
 
   private

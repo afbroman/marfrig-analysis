@@ -7,7 +7,7 @@ describe Analyzer do
 
   describe "new analyzer" do
     it "accepts a directory as a parameter and set the @directory variable" do
-      analyzer = Analyzer.new("data/")
+      analyzer = Analyzer.new("data/", nil)
       analyzer.should be_an_instance_of Analyzer
       analyzer.directory.should == "data/"
     end
@@ -19,27 +19,28 @@ describe Analyzer do
 
     it "accepts filename with correct format" do
       fn = "data/2500_31%2F01%2F2011.html"
-      analyzer = Analyzer.new(fn)
+      analyzer = Analyzer.new(fn, nil)
       analyzer.should be_an_instance_of Analyzer
       analyzer.filename.should == fn 
     end
 
     it "raises exception for invalid filename format" do
       fn = "data/samplefile.html"
-      expect { Analyzer.new(fn) }.to raise_error(InvalidFilenameException, "invalid filename format")
+      expect { Analyzer.new(fn, nil) }.to 
+        raise_error(InvalidFilenameException, "invalid filename format")
     end
   end
 
   describe "#filename" do
     it "returns the correct filename when a filename is given as the parameter" do
       fn = "data/2500_31%2F01%2F2011.html"
-      analyzer = Analyzer.new(fn)
+      analyzer = Analyzer.new(fn, nil)
       analyzer.filename.should == fn
     end
 
     it "returns nil when a directory is given as the parameter" do
       dir  = "data/"
-      analyzer = Analyzer.new(dir)
+      analyzer = Analyzer.new(dir, nil)
       analyzer.filename.should == nil 
     end
   end
@@ -47,13 +48,13 @@ describe Analyzer do
   describe "#directory" do
     it "returns the correct directory name when a directory is given as the parameter" do
       dir = "data/"
-      analyzer = Analyzer.new(dir)
+      analyzer = Analyzer.new(dir, nil)
       analyzer.directory.should == dir
     end
 
     it "returns nil when a filename is given as the parameter" do
       fn = "data/2500_31%2F01%2F2011.html"
-      analyzer = Analyzer.new(fn)
+      analyzer = Analyzer.new(fn, nil)
       analyzer.directory.should == nil
     end
   end
@@ -62,7 +63,7 @@ describe Analyzer do
     describe "pull_data from file" do
       before :each do
         fn = "data/2500_31%2F01%2F2011.html"
-        @analyzer = Analyzer.new(fn)
+        @analyzer = Analyzer.new(fn, nil)
         @fazendas = ["FAZENDA CAJUEIROS , 040313",
                      "FAZENDA FORTALEZA , 12643",
                      "FAZENDA PRENDA , 24963",
@@ -106,6 +107,20 @@ describe Analyzer do
         @analyzer.pull_data
         @analyzer.estados.should == @estados
       end
+    end
+  end
+
+  describe "output_csv" do
+    before :each do
+      @output = "data/output.csv"
+      fn = "data/2500_31%2F01%2F2011.html"
+      @analyzer = Analyzer.new(fn,@output)
+     firstline = "FAZENDA CAJUEIROS , 040313,13.371.622-8,GAUCHA DO NORTE,MT"
+    end
+
+    it "outputs the file as CSV" do
+      @analyzer.output_csv
+      File.exists?(@output).should be_true
     end
   end
   
