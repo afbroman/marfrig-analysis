@@ -132,14 +132,9 @@ describe Analyzer do
       it "pulls data from valid files" do
         dir = "data"
         analyzer = Analyzer.new(dir, nil)
-        analyzer.dir_filenames.should == ["#{dir}/.", "#{dir}/..", "#{dir}/2500_31%2F01%2F2011.html", "#{dir}/output.csv", "#{dir}/samplefile.html"]
+        analyzer.dir_filenames.should == ["#{dir}/.", "#{dir}/..", "#{dir}/1751_09%2F01%2F2012.html","#{dir}/2500_31%2F01%2F2011.html", "#{dir}/output.csv", "#{dir}/samplefile.html"]
         analyzer.pull_data
-        analyzer.fazendas.should == ["FAZENDA CAJUEIROS",
-                     "FAZENDA FORTALEZA",
-                     "FAZENDA PRENDA",
-                     "NOSSA SENHORA APARECIDA",
-                     "PIRAPO",
-                     "SONHO MEU"] 
+        analyzer.fazendas.should == ["FAZENDA GERA", "FAZENDA OURO BRANCO","FAZENDA PAREDAO","FAZENDA PORTO DO CAMPO","FAZENDA PORTO DO CAMPO","FAZENDA PRIMAVERA","FAZENDA RIO PRETO","FAZENDA RIO PRETO","FAZENDA VALE DO SANGUE","FAZENDA CAJUEIROS","FAZENDA FORTALEZA","FAZENDA PRENDA","NOSSA SENHORA APARECIDA","PIRAPO","SONHO MEU"] 
       end
       
     end
@@ -190,7 +185,7 @@ describe Analyzer do
         dir = "data"
         @analyzer = Analyzer.new(dir,@output)
         @analyzer.pull_data
-        @firstline = "2500,1/31/2011,FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
+        @firstline = "1751,1/9/2012,FAZENDA GERA,SN,13.417.684-7,CAMPO NOVO DO PARECIS,MT\n" 
         @lastline = "2500,1/31/2011,SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
       end
       

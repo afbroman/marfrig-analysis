@@ -41,8 +41,8 @@ class Analyzer
 
     # Handles memory very poorly. Should append to output file after pulling from each file?
     else # directory
-      result = Array.new
       dir_filenames.each do |fn|
+        result = Array.new
         if FILENAME_FORMAT.match(fn)
           doc = Nokogiri::HTML(open(fn))
           doc.css('table tr td').each { |i| result << i.content }
@@ -68,10 +68,17 @@ class Analyzer
   private
   def extract_fields(data, filename)
     faz_num = Array.new
+    m = FILENAME_FORMAT.match(filename)
+    count = 0
     data.each_slice(5).map do |slc| 
       [faz_num, @incricaos, @municipios, @estados].each_with_index do |item,index|
         item << slc[index].rstrip
       end
+      count += 1
+    end
+    count.times do
+      @sifs << m[:sif]
+      @dates << "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}" 
     end
     faz_num.each do |i|
       temp = i.split(',')
@@ -83,10 +90,6 @@ class Analyzer
       end
     end
     m = FILENAME_FORMAT.match(filename)
-    data.each do
-      @sifs << m[:sif]
-      @dates << "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}" 
-    end
   end
   
 end
