@@ -3,6 +3,7 @@ require 'csv'
 
 class Analyzer
   attr_accessor :filename, :directory, :output, :fazendas, :numeros, :incricaos, :municipios, :estados
+  attr_accessor :dir_filenames
 
   FILENAME_FORMAT = /(?<sif>\d{4})_(?<day>\d{2})%2F(?<month>\d{2})%2F(?<year>\d{4})\.html/
 
@@ -13,9 +14,11 @@ class Analyzer
     @municipios = Array.new
     @estados = Array.new
     @output = out
+    @dir_filenames = Array.new
     
     if File.directory? item 
       @directory = item
+      Dir.entries(@directory).each {|i| @dir_filenames << "#{@directory}/#{i}"}
     elsif File.exists? item
       raise InvalidFilenameException, "invalid filename format" unless FILENAME_FORMAT.match(item)
       @filename = item
@@ -32,8 +35,16 @@ class Analyzer
       # strip off header
       result = result[5..-1]
       extract_fields result
-    else
-      
+    else # directory
+      result = Array.new
+      dir_filenames.each do |fn|
+        if FILENAME_FORMAT.match(fn)
+          doc = Nokogiri::HTML(open(fn))
+          doc.css('table tr td').each { |i| result << i.content }
+          result = result[5..-1]
+          extract_fields result
+        end
+      end
     end
   end
 

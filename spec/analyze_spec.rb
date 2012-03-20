@@ -60,7 +60,7 @@ describe Analyzer do
   end
 
   describe "pull_data" do
-    describe "pull_data from file" do
+    describe "pull data from file" do
       before :each do
         fn = "data/2500_31%2F01%2F2011.html"
         @analyzer = Analyzer.new(fn, nil)
@@ -113,6 +113,35 @@ describe Analyzer do
         @analyzer.pull_data
         @analyzer.estados.should == @estados
       end
+    end
+
+    describe "pull data from directory" do
+
+      # bad test. Does not ensure that the pull_data call is actually accessing the directory
+      it "pulls no data from invalid filenames" do
+        dir = "data_invalid"
+        analyzer = Analyzer.new(dir, nil)
+        
+        analyzer.dir_filenames.should == ["#{dir}/.","#{dir}/..","#{dir}/invalid_filename.html"]
+        
+        analyzer.pull_data
+        
+        analyzer.fazendas.should == []
+      end
+
+      it "pulls data from valid files" do
+        dir = "data"
+        analyzer = Analyzer.new(dir, nil)
+        analyzer.dir_filenames.should == ["#{dir}/.", "#{dir}/..", "#{dir}/2500_31%2F01%2F2011.html", "#{dir}/output.csv", "#{dir}/samplefile.html"]
+        analyzer.pull_data
+        analyzer.fazendas.should == ["FAZENDA CAJUEIROS",
+                     "FAZENDA FORTALEZA",
+                     "FAZENDA PRENDA",
+                     "NOSSA SENHORA APARECIDA",
+                     "PIRAPO",
+                     "SONHO MEU"] 
+      end
+      
     end
   end
 
