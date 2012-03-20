@@ -3,7 +3,7 @@ require 'csv'
 
 class Analyzer
   attr_accessor :filename, :directory, :output, :fazendas, :numeros, :incricaos, :municipios, :estados
-  attr_accessor :dir_filenames
+  attr_accessor :dir_filenames, :sifs, :dates
 
   FILENAME_FORMAT = /(?<sif>\d{4})_(?<day>\d{2})%2F(?<month>\d{2})%2F(?<year>\d{4})\.html/
 
@@ -13,6 +13,9 @@ class Analyzer
     @incricaos = Array.new
     @municipios = Array.new
     @estados = Array.new
+    @sifs = Array.new
+    @dates = Array.new
+    
     @output = out
     @dir_filenames = Array.new
     
@@ -34,7 +37,9 @@ class Analyzer
       doc.css('table tr td').each { |i| result << i.content }
       # strip off header
       result = result[5..-1]
-      extract_fields result
+      extract_fields(result, @filename)
+
+    # Handles memory very poorly. Should append to output file after pulling from each file?
     else # directory
       result = Array.new
       dir_filenames.each do |fn|
@@ -42,26 +47,26 @@ class Analyzer
           doc = Nokogiri::HTML(open(fn))
           doc.css('table tr td').each { |i| result << i.content }
           result = result[5..-1]
-          extract_fields result
+          extract_fields(result, fn)
         end
       end
     end
   end
 
   def output_csv
-    if (m = FILENAME_FORMAT.match(@filename))
-      date = "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}"
-      sif = m[:sif]
-    end
+    #if (@filename && m = FILENAME_FORMAT.match(@filename))
+    #  @date = "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}"
+    #  @sif = m[:sif]
+    #end
     CSV.open(@output, 'wb') do |csv|
       for i in 0...@fazendas.length
-        csv << [sif,date,@fazendas[i],@numeros[i],@incricaos[i],@municipios[i],@estados[i]] 
+        csv << [@sifs[i],@dates[i],@fazendas[i],@numeros[i],@incricaos[i],@municipios[i],@estados[i]] 
       end
     end
   end
 
   private
-  def extract_fields(data)
+  def extract_fields(data, filename)
     faz_num = Array.new
     data.each_slice(5).map do |slc| 
       [faz_num, @incricaos, @municipios, @estados].each_with_index do |item,index|
@@ -76,6 +81,11 @@ class Analyzer
       else
         @numeros << "NA"
       end
+    end
+    m = FILENAME_FORMAT.match(filename)
+    data.each do
+      @sifs << m[:sif]
+      @dates << "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}" 
     end
   end
   

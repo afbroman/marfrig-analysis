@@ -146,36 +146,68 @@ describe Analyzer do
   end
 
   describe "output_csv" do
-    before :all do
-      @output = "data/output.csv"
-    end
-    
-    before :each do
-      fn = "data/2500_31%2F01%2F2011.html"
-      @analyzer = Analyzer.new(fn,@output)
-      @analyzer.pull_data
-      @firstline = "2500,1/31/2011,FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
-      @lastline = "2500,1/31/2011,SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
+    describe "output after analysis of filename" do
+      before :all do
+        @output = "data/output.csv"
+      end
+
+      before :each do
+        fn = "data/2500_31%2F01%2F2011.html"
+        @analyzer = Analyzer.new(fn,@output)
+        @analyzer.pull_data
+        @firstline = "2500,1/31/2011,FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
+        @lastline = "2500,1/31/2011,SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
+      end
+
+      it "outputs the file as CSV" do
+        @analyzer.output_csv
+        File.exists?(@output).should be_true
+      end
+
+      it "outputs a CSV file with a valid first line" do
+        @analyzer.output_csv
+        File.open(@output,'r').first.should == @firstline
+      end
+
+      it "outputs a CSV file with a valid last line" do
+        @analyzer.output_csv
+        temp_array = Array.new
+        File.open(@output,'r').each do |line|
+          temp_array << line
+        end
+
+        temp_array.last.should == @lastline
+      end
     end
 
-    it "outputs the file as CSV" do
-      @analyzer.output_csv
-      File.exists?(@output).should be_true
-    end
+    describe "output after analysis of directory" do
+      
+      before :all do
+        @output = "data/output.csv"
+      end
 
-    it "outputs a CSV file with a valid first line" do
-      @analyzer.output_csv
-      File.open(@output,'r').first.should == @firstline
-    end
-
-    it "outputs a CSV file with a valid last line" do
-      @analyzer.output_csv
-      temp_array = Array.new
-      File.open(@output,'r').each do |line|
-        temp_array << line
+      before :each do
+        dir = "data"
+        @analyzer = Analyzer.new(dir,@output)
+        @analyzer.pull_data
+        @firstline = "2500,1/31/2011,FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
+        @lastline = "2500,1/31/2011,SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
       end
       
-      temp_array.last.should == @lastline
+      it "outputs a CSV file with a valid first line" do
+        @analyzer.output_csv
+        File.open(@output,'r').first.should == @firstline
+      end
+
+      it "outputs a CSV file with a valid last line" do
+        @analyzer.output_csv
+        temp_array = Array.new
+        File.open(@output,'r').each do |line|
+          temp_array << line
+        end
+        temp_array.last.should == @lastline
+      end
+      
     end
   end
   
