@@ -37,7 +37,9 @@ class Analyzer
   end
 
   def output_csv
-    CSV.open(@output, 'wb') { |csv| csv << [] }
+    CSV.open(@output, 'wb') do |csv| 
+      csv << [@fazendas[0],@incricaos[0],@municipios[0],@estados[0]] 
+    end
   end
 
   private

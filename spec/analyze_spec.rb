@@ -115,12 +115,18 @@ describe Analyzer do
       @output = "data/output.csv"
       fn = "data/2500_31%2F01%2F2011.html"
       @analyzer = Analyzer.new(fn,@output)
-     firstline = "FAZENDA CAJUEIROS , 040313,13.371.622-8,GAUCHA DO NORTE,MT"
+      @analyzer.pull_data
+      @firstline = "\"FAZENDA CAJUEIROS , 040313\",13.371.622-8,GAUCHA DO NORTE,MT\n"
     end
 
     it "outputs the file as CSV" do
       @analyzer.output_csv
       File.exists?(@output).should be_true
+    end
+
+    it "outputs a CSV file with a valid first line" do
+      @analyzer.output_csv
+      File.open(@output).first.should == @firstline
     end
   end
   
