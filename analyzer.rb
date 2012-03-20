@@ -4,7 +4,7 @@ require 'csv'
 class Analyzer
   attr_accessor :filename, :directory, :output, :fazendas, :numeros, :incricaos, :municipios, :estados
 
-  FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
+  FILENAME_FORMAT = /(?<sif>\d{4})_(?<day>\d{2})%2F(?<month>\d{2})%2F(?<year>\d{4})\.html/
 
   def initialize(item, out)
     @fazendas = Array.new
@@ -17,7 +17,7 @@ class Analyzer
     if File.directory? item 
       @directory = item
     elsif File.exists? item
-      raise InvalidFilenameException, "invalid filename format" unless item =~ FILENAME_FORMAT 
+      raise InvalidFilenameException, "invalid filename format" unless FILENAME_FORMAT.match(item)
       @filename = item
     elsif item != ""
       raise NonexistentFileException, "nonexistent file or directory" 
