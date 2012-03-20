@@ -10,6 +10,7 @@ class Analyzer
     @incricaos = Array.new
     @municipios = Array.new
     @estados = Array.new
+    
     if File.directory? item 
       @directory = item
     elsif File.exists? item
