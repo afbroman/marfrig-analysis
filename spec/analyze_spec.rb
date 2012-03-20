@@ -64,12 +64,13 @@ describe Analyzer do
       before :each do
         fn = "data/2500_31%2F01%2F2011.html"
         @analyzer = Analyzer.new(fn, nil)
-        @fazendas = ["FAZENDA CAJUEIROS , 040313",
-                     "FAZENDA FORTALEZA , 12643",
-                     "FAZENDA PRENDA , 24963",
-                     "NOSSA SENHORA APARECIDA, SN",
+        @fazendas = ["FAZENDA CAJUEIROS",
+                     "FAZENDA FORTALEZA",
+                     "FAZENDA PRENDA",
+                     "NOSSA SENHORA APARECIDA",
                      "PIRAPO",
                      "SONHO MEU"]
+        @numeros = ["040313","12643","24963","SN","NA","NA"]
         @incricaos = ["13.371.622-8", "13.269.389-5", "13.285.324-8", "13.306.879-0", "13.388.007-9",
           "13.303.993-5"]
         @municipios = ["GAUCHA DO NORTE",
@@ -93,6 +94,11 @@ describe Analyzer do
         @analyzer.fazendas.should == @fazendas
       end
 
+      it "reads the numeros from the file" do
+        @analyzer.pull_data
+        @analyzer.numeros.should == @numeros
+      end
+
       it "reads the incricaos from the file" do
         @analyzer.pull_data
         @analyzer.incricaos.should == @incricaos
@@ -111,12 +117,16 @@ describe Analyzer do
   end
 
   describe "output_csv" do
-    before :each do
+    before :all do
       @output = "data/output.csv"
+    end
+    
+    before :each do
       fn = "data/2500_31%2F01%2F2011.html"
       @analyzer = Analyzer.new(fn,@output)
       @analyzer.pull_data
-      @firstline = "\"FAZENDA CAJUEIROS , 040313\",13.371.622-8,GAUCHA DO NORTE,MT\n"
+      @firstline = "FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
+      @lastline = "SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
     end
 
     it "outputs the file as CSV" do
@@ -126,7 +136,17 @@ describe Analyzer do
 
     it "outputs a CSV file with a valid first line" do
       @analyzer.output_csv
-      File.open(@output).first.should == @firstline
+      File.open(@output,'r').first.should == @firstline
+    end
+
+    it "outputs a CSV file with a valid last line" do
+      @analyzer.output_csv
+      temp_array = Array.new
+      File.open(@output,'r').each do |line|
+        temp_array << line
+      end
+      
+      temp_array.last.should == @lastline
     end
   end
   

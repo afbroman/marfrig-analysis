@@ -2,12 +2,13 @@ require 'nokogiri'
 require 'csv'
 
 class Analyzer
-  attr_accessor :filename, :directory, :output, :fazendas, :incricaos, :municipios, :estados
+  attr_accessor :filename, :directory, :output, :fazendas, :numeros, :incricaos, :municipios, :estados
 
   FILENAME_FORMAT = /\d{4}_\d{2}%2F\d{2}%2F\d{4}\.html/
 
   def initialize(item, out)
     @fazendas = Array.new
+    @numeros = Array.new
     @incricaos = Array.new
     @municipios = Array.new
     @estados = Array.new
@@ -37,18 +38,30 @@ class Analyzer
   end
 
   def output_csv
-    CSV.open(@output, 'wb') do |csv| 
-      csv << [@fazendas[0],@incricaos[0],@municipios[0],@estados[0]] 
+    CSV.open(@output, 'wb') do |csv|
+      for i in 0...@fazendas.length
+        csv << [@fazendas[i],@numeros[i],@incricaos[i],@municipios[i],@estados[i]] 
+      end
     end
   end
 
   private
   def extract_fields(data)
+    faz_num = Array.new
     data.each_slice(5).map do |slc| 
-      [@fazendas, @incricaos, @municipios, @estados].each_with_index do |item,index|
+      [faz_num, @incricaos, @municipios, @estados].each_with_index do |item,index|
         item << slc[index].rstrip
       end
-    end 
+    end
+    faz_num.each do |i|
+      temp = i.split(',')
+      @fazendas << temp[0].strip
+      if temp.length == 2
+        @numeros << temp[1].strip
+      else
+        @numeros << "NA"
+      end
+    end
   end
   
 end
