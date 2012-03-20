@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Analyzer do
 
-  before :each do
-  end
+  #before :each do
+  #end
 
   describe "new analyzer" do
     it "accepts a directory as a parameter and set the @directory variable" do
@@ -125,8 +125,8 @@ describe Analyzer do
       fn = "data/2500_31%2F01%2F2011.html"
       @analyzer = Analyzer.new(fn,@output)
       @analyzer.pull_data
-      @firstline = "FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
-      @lastline = "SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
+      @firstline = "2500,1/31/2011,FAZENDA CAJUEIROS,040313,13.371.622-8,GAUCHA DO NORTE,MT\n"
+      @lastline = "2500,1/31/2011,SONHO MEU,NA,13.303.993-5,CAMPINAPOLIS,MT\n"
     end
 
     it "outputs the file as CSV" do

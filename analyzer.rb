@@ -38,9 +38,13 @@ class Analyzer
   end
 
   def output_csv
+    if (m = FILENAME_FORMAT.match(@filename))
+      date = "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}"
+      sif = m[:sif]
+    end
     CSV.open(@output, 'wb') do |csv|
       for i in 0...@fazendas.length
-        csv << [@fazendas[i],@numeros[i],@incricaos[i],@municipios[i],@estados[i]] 
+        csv << [sif,date,@fazendas[i],@numeros[i],@incricaos[i],@municipios[i],@estados[i]] 
       end
     end
   end
