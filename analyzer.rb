@@ -29,13 +29,22 @@ class Analyzer
       doc.css('table tr td').each { |i| result << i.content }
       # strip off header
       result = result[5..-1]
-      result.each_slice(5).map do |slc| 
-        [@fazendas, @incricaos, @municipios, @estados].each_with_index do |item,index|
-          item << slc[index].rstrip
-        end
-      end
+      extract_fields result
     end
   end
+
+  private
+  def extract_fields(data)
+    data.each_slice(5).map do |slc| 
+      [@fazendas, @incricaos, @municipios, @estados].each_with_index do |item,index|
+        item << slc[index].rstrip
+      end
+    end 
+  end
+
+
+
+  
 
   
 end
