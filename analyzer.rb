@@ -27,17 +27,12 @@ class Analyzer
       doc.css('table tr td').each { |i| result << i.content }
       # strip off header information
       result = result[5..-1]
-      result.each_slice(5).map do |i| 
-        # grab fazendas
-        @fazendas << i[0].rstrip
-        # grab incricaos
-        @incricaos << i[1].rstrip
-        # grab municipios
-        @municipios << i[2].rstrip
-        # grab estados
-        @estados << i[3].rstrip
+      result.each_slice(5).map do |slc| 
+        [@fazendas, @incricaos, @municipios, @estados].each_with_index do |item,index|
+          item << slc[index].rstrip
+        end
       end
-      
+
     end
   end
 end
