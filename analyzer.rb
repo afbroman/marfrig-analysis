@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'csv'
 
 class Analyzer
   attr_accessor :filename, :directory, :fazendas, :incricaos, :municipios, :estados
@@ -26,14 +27,15 @@ class Analyzer
       result = Array.new
       doc = Nokogiri::HTML(open(@filename))
       doc.css('table tr td').each { |i| result << i.content }
-      # strip off header information
+      # strip off header
       result = result[5..-1]
       result.each_slice(5).map do |slc| 
         [@fazendas, @incricaos, @municipios, @estados].each_with_index do |item,index|
           item << slc[index].rstrip
         end
       end
-
     end
   end
+
+  
 end
