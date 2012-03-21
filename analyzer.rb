@@ -35,9 +35,11 @@ class Analyzer
       result = Array.new
       doc = Nokogiri::HTML(open(@filename))
       doc.css('table tr td').each { |i| result << i.content }
-      # strip off header
-      result = result[5..-1]
-      extract_fields(result, @filename)
+      if result.length > 5
+        # strip off header
+        result = result[5..-1]
+        extract_fields(result, @filename) unless result.empty?
+      end
 
     # Handles memory very poorly. Should append to output file after pulling from each file?
     else # directory
@@ -46,8 +48,10 @@ class Analyzer
         if FILENAME_FORMAT.match(fn)
           doc = Nokogiri::HTML(open(fn))
           doc.css('table tr td').each { |i| result << i.content }
-          result = result[5..-1]
-          extract_fields(result, fn)
+          if result.length > 5
+            result = result[5..-1]
+            extract_fields(result, fn) unless result.empty?
+          end
         end
       end
     end
@@ -70,7 +74,7 @@ class Analyzer
     faz_num = Array.new
     m = FILENAME_FORMAT.match(filename)
     count = 0
-    data.each_slice(5).map do |slc| 
+    data.each_slice(5).map do |slc|
       [faz_num, @incricaos, @municipios, @estados].each_with_index do |item,index|
         item << slc[index].rstrip
       end
