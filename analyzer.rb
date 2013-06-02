@@ -2,19 +2,12 @@ require 'nokogiri'
 require 'csv'
 
 class Analyzer
-  attr_accessor :filename, :directory, :output, :fazendas, :numeros, :incricaos, :municipios, :estados
-  attr_accessor :dir_filenames, :sifs, :dates, :data_result
+  attr_accessor :filename, :directory, :output
+  attr_accessor :dir_filenames, :data_result
 
   FILENAME_FORMAT = /(?<sif>\d{4})_(?<day>\d{2})_(?<month>\d{2})_(?<year>\d{4})\.html/
 
   def initialize(item, out)
-    @fazendas = Array.new
-    @numeros = Array.new
-    @incricaos = Array.new
-    @municipios = Array.new
-    @estados = Array.new
-    @sifs = Array.new
-    @dates = Array.new
     
     @output = out
     @dir_filenames = Array.new
@@ -69,14 +62,7 @@ class Analyzer
   end
 
   def output_csv
-    #if (@filename && m = FILENAME_FORMAT.match(@filename))
-    #  @date = "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}"
-    #  @sif = m[:sif]
-    #end
     CSV.open(@output, 'wb') do |csv|
-      # for i in 0...@fazendas.length
-      #   csv << [@sifs[i],@dates[i],@fazendas[i],@numeros[i],@incricaos[i],@municipios[i],@estados[i]] 
-      # end
       @data_result.each do |row|
 
         csv << row
@@ -85,35 +71,6 @@ class Analyzer
 
     end
   end
-
-  private
-
-  def extract_fields(data, filename)
-    faz_num = Array.new
-    m = FILENAME_FORMAT.match(filename)
-    count = 0
-    data.each_slice(5).map do |slc|
-      [faz_num, @incricaos, @municipios, @estados].each_with_index do |item,index|
-        item << slc[index].rstrip
-      end
-      count += 1
-    end
-    count.times do
-      @sifs << m[:sif]
-      @dates << "#{m[:month].to_i}/#{m[:day].to_i}/#{m[:year]}" 
-    end
-    faz_num.each do |i|
-      temp = i.split(',')
-      @fazendas << temp[0].strip
-      if temp.length == 2
-        @numeros << temp[1].strip
-      else
-        @numeros << "NA"
-      end
-    end
-    m = FILENAME_FORMAT.match(filename)
-  end
-  
 end
 
 class NonexistentFileException < Exception; end
